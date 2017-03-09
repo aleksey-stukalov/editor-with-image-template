@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="com.company.imagefield.web.customer.CustomerEdit"
+        datasource="customerDs"
+        focusComponent="fieldGroup"
+        messagesPack="com.company.imagefield.web.customer">
+    <dsContext>
+        <datasource id="customerDs"
+                    class="com.company.imagefield.entity.Customer"
+                    view="customer-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <hbox spacing="true">
+            <groupBox caption="msg://generalInfoGroupBox"
+                      height="100%"
+                      spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="customerDs">
+                    <column width="250px">
+                        <field id="name"/>
+                        <field id="logo"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+            <groupBox id="imageGroupBox"
+                      caption="msg://imageGroupBox"
+                      spacing="true">
+                <embedded id="imageDisplay"
+                          align="TOP_CENTER"
+                          height="200px"/>
+                <upload id="imageUpload"
+                        accept="*.png,*.jpg"
+                        align="MIDDLE_CENTER"
+                        clearButtonIcon="icons/close.png"
+                        datasource="customerDs"
+                        dropZone="imageGroupBox"
+                        fileStoragePutMode="IMMEDIATE"
+                        property="logo"
+                        showClearButton="true"
+                        uploadButtonIcon="icons/upload.png"/>
+            </groupBox>
+        </hbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

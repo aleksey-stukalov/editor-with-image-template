@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<template icon="TEMPLATE_EDITOR"
+          name="Entity editor with image">
+    <description>
+        <![CDATA[Standard entity editor with image]]>
+    </description>
+    <locMessages key="editorCaption">
+        <message lang="default">
+            <![CDATA[${entity.className} editor]]>
+        </message>
+    </locMessages>
+    <locMessages key="imageGroupBox">
+        <message lang="default">
+            <![CDATA[Image]]>
+        </message>
+    </locMessages>
+    <locMessages key="generalInfoGroupBox">
+        <message lang="default">
+            <![CDATA[General info]]>
+        </message>
+    </locMessages>
+    <property caption="Entity"
+              code="entity"
+              propertyType="ENTITY"
+              required="true"/>
+    <property caption="Entity view"
+              code="entityView"
+              propertyType="VIEW"
+              relatedProperty="entity"
+              required="true"/>
+    <property caption="Image Property"
+              code="imageProperty"
+              propertyType="STRING"/>
+    <property caption="Image Extensions"
+              code="imageExtensions"
+              defaultValue="*.png,*.jpg"
+              propertyType="STRING"/>
+    <property caption="Column width"
+              code="columnWidth"
+              defaultValue="250px"
+              propertyType="PX_SIZE"/>
+    <property caption="Modal dialog"
+              code="modalDialog"
+              propertyType="BOOLEAN"/>
+    <property caption="Extended window actions"
+              code="extendedWindowActions"
+              propertyType="BOOLEAN"/>
+    <source fileExt="xml"
+            name="descriptor"
+            templateFileName="${helper.generateDescriptorFileName(entity)}-edit"/>
+    <source fileExt="java"
+            name="controller"
+            templateFileName="${controllerName}"/>
+    <source fileExt="groovy"
+            name="controller"
+            templateFileName="${controllerName}"/>
+</template>

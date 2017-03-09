@@ -1,0 +1,82 @@
+<%
+screenId = "${entity.name}.edit"
+controllerName = "${entity.className}Edit"
+def datasourceId = "${entity.uncapitalizedClassName}Ds"
+def nestedDatasourceProperties = helper.getEditorNestedDatasourceProperties(entityView)
+def nestedCollectionDatasourceProperties = helper.getEditorNestedCollectionDatasourceProperties(entityView)
+def optionsDatasources=helper.getOptionsDatasources(entityView)
+def createScrollBox = entityView.allProperties.size() > 10
+def collectionAttributesTablesXml = helper.getEditorCollectionAttributesTablesXml(nestedCollectionDatasourceProperties, entityView)
+%><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="${xmlNamespace_window}"
+        caption="msg://editorCaption"
+        class="${packageName}.${controllerName}"
+        datasource="${datasourceId}"
+        focusComponent="fieldGroup"
+        messagesPack="${packageName}">
+    <dsContext>
+        <datasource id="${datasourceId}"
+                    class="${entity.fqn}"
+                    view="${entityView.name}"<%print ((!nestedDatasourceProperties && !nestedCollectionDatasourceProperties) ? '/>' : '>')%>
+        <%
+        nestedDatasourceProperties.each {
+            print '<datasource id="' + it + 'Ds" property="' + it + '"/>\n'
+        }
+
+        nestedCollectionDatasourceProperties.each {
+            print '<collectionDatasource id="' + it + 'Ds" property="' + it + '"/>\n'
+        }
+        %><%if (nestedDatasourceProperties || nestedCollectionDatasourceProperties) {%></datasource><%}%><%if (optionsDatasources) {
+            optionsDatasources.each {
+                println it.generateXml()
+            }}%>
+    </dsContext>
+    <%if (modalDialog) {%>
+    <dialogMode height="AUTO"
+                width="600"
+                modal="true"
+                forceDialog="true"/>
+    <%} else {%>
+    <dialogMode height="600"
+                width="800"/><%}%>
+    <layout expand=<%(createScrollBox ? print("'scrollBox'") : print("'windowActions'"))%> spacing="true">
+    <%if (createScrollBox) {
+        print('<scrollBox id="scrollBox" spacing="true">')}%>
+        <%if (imageProperty?.trim()) {%>
+        <hbox spacing="true">
+            <groupBox caption="msg://generalInfoGroupBox"
+                      spacing="true"
+                      height="100%">
+        <%}%>
+        ${helper.generateFiledGroupXml(entityView, columnWidth, datasourceId)}
+        <%if (imageProperty?.trim()) {%>
+            </groupBox>        
+        
+            <groupBox id="imageGroupBox"
+                      caption="msg://imageGroupBox"
+                      spacing="true">
+                <embedded id="imageDisplay"
+                          align="TOP_CENTER"
+                          height="200px"/>
+                <upload id="imageUpload"
+                        accept="${imageExtensions}"
+                        align="MIDDLE_CENTER"
+                        clearButtonIcon="icons/close.png"
+                        datasource="${datasourceId}"
+                        dropZone="imageGroupBox"
+                        fileStoragePutMode="IMMEDIATE"
+                        property="${imageProperty}"
+                        showClearButton="true"
+                        uploadButtonIcon="icons/upload.png"/>
+            </groupBox>            
+        </hbox>
+        <%}%>
+        <%collectionAttributesTablesXml.each{propertyName, tableXml ->
+            print "\n$tableXml"}%>
+        <%if (createScrollBox) {
+        print('</scrollBox>')
+        }%>
+        <frame id="windowActions"
+                screen=<%(extendedWindowActions ? print("'extendedEditWindowActions'") : print("'editWindowActions'"))%>/>
+    </layout>
+</window>
